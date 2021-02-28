@@ -2,6 +2,7 @@ package ru.job4j.cars.model;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "cars")
@@ -9,15 +10,37 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
+
     @ManyToOne
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    public static Car of(String name, Brand brand) {
+    @ManyToOne
+    @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_ID_FK"))
+    private Engine engine;
+
+    @ManyToOne
+    @JoinColumn(name = "driver_id", foreignKey = @ForeignKey(name = "DRIVER_ID_FK"))
+    private Driver driver;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "history_owner",
+        joinColumns = {@JoinColumn(name = "driver_id", nullable = false, updatable = false)},
+        inverseJoinColumns = {@JoinColumn(name = "car_id", nullable = false, updatable = false)})
+    private Set<Driver> drivers;
+
+    public Set<Driver> getDrivers() {
+        return drivers;
+    }
+
+    public static Car of(String name, Brand brand, Engine engine, Driver driver) {
         Car car = new Car();
         car.setName(name);
         car.setBrand(brand);
+        car.setEngine(engine);
+        car.setDriver(driver);
         return car;
     }
 
@@ -43,6 +66,22 @@ public class Car {
 
     public void setBrand(Brand brand) {
         this.brand = brand;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
     }
 
     @Override
