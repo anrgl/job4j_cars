@@ -22,6 +22,10 @@ public class Car {
     private Engine engine;
 
     @ManyToOne
+    @JoinColumn(name = "body_id", foreignKey = @ForeignKey(name = "BODY_ID_FK"))
+    private Body body;
+
+    @ManyToOne
     @JoinColumn(name = "driver_id", foreignKey = @ForeignKey(name = "DRIVER_ID_FK"))
     private Driver driver;
 
@@ -35,11 +39,12 @@ public class Car {
         return drivers;
     }
 
-    public static Car of(String name, Brand brand, Engine engine, Driver driver) {
+    public static Car of(String name, Brand brand, Engine engine, Body body, Driver driver) {
         Car car = new Car();
         car.setName(name);
         car.setBrand(brand);
         car.setEngine(engine);
+        car.setBody(body);
         car.setDriver(driver);
         return car;
     }
@@ -82,6 +87,18 @@ public class Car {
 
     public void setDriver(Driver driver) {
         this.driver = driver;
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void setDrivers(Set<Driver> drivers) {
+        this.drivers = drivers;
     }
 
     @Override
