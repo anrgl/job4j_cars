@@ -13,20 +13,20 @@ public class Car {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "brand_id")
     private Brand brand;
 
-    @ManyToOne
-    @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_ID_FK"))
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "engine_id")
     private Engine engine;
 
-    @ManyToOne
-    @JoinColumn(name = "body_id", foreignKey = @ForeignKey(name = "BODY_ID_FK"))
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "body_id")
     private Body body;
 
     @ManyToOne
-    @JoinColumn(name = "driver_id", foreignKey = @ForeignKey(name = "DRIVER_ID_FK"))
+    @JoinColumn(name = "driver_id")
     private Driver driver;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

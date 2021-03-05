@@ -2,6 +2,7 @@ package ru.job4j.cars.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,28 +17,30 @@ public class Ad {
     private boolean isSold;
     private double price;
 
-    @ManyToOne
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created;
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "CAR_ID_FK"))
+            nullable = false)
     private Car car;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "driver_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "DRIVER_ID_FK"))
+            nullable = false)
     private Driver driver;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photos = new ArrayList<>();
 
-    public static Ad of(String desc, boolean isSold, double price, Car car, Driver driver) {
+    public static Ad of(String desc, boolean isSold, double price, Car car, Driver driver, Date created) {
         Ad ad = new Ad();
         ad.setDescription(desc);
         ad.setSold(isSold);
         ad.setPrice(price);
         ad.setCar(car);
         ad.setDriver(driver);
+        ad.setCreated(created);
         return ad;
     }
 
@@ -75,6 +78,14 @@ public class Ad {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public Car getCar() {
